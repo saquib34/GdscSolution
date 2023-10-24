@@ -1,0 +1,51 @@
+def compute_cost(X, y, W, b):
+    """
+    Compute the cost (loss) of the linear regression model.
+    
+    Args:
+    X (numpy array): Input features (m x n).
+    y (numpy array): Target values (m x 1).
+    W (numpy array): Weights (n x 1).
+    b (float): Bias.
+    
+    Returns:
+    float: Cost (mean squared error).
+    """
+    m = len(y)
+    predictions = predict(X, W, b)
+    cost = np.sum((predictions - y) ** 2) / (2 * m)
+    return cost
+
+
+def gradient_descent(X, y, W, b, learning_rate, num_iterations):
+    """
+    Perform gradient descent to optimize the weights and bias.
+    
+    Args:
+    X (numpy array): Input features (m x n).
+    y (numpy array): Target values (m x 1).
+    W (numpy array): Initial weights (n x 1).
+    b (float): Initial bias.
+    learning_rate (float): Learning rate for gradient descent.
+    num_iterations (int): Number of iterations.
+    
+    Returns:
+    numpy array: Optimized weights (n x 1).
+    float: Optimized bias.
+    list: Cost history for each iteration.
+    """
+    m = len(y)
+    cost_history = []
+    
+    for i in range(num_iterations):
+        predictions = predict(X, W, b)
+        gradient_W = np.dot(X.T, (predictions - y)) / m
+        gradient_b = np.sum(predictions - y) / m
+        
+        W -= learning_rate * gradient_W
+        b -= learning_rate * gradient_b
+        
+        cost = compute_cost(X, y, W, b)
+        cost_history.append(cost)
+    
+    return W, b, cost_history
